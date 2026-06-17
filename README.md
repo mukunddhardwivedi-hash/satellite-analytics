@@ -1,272 +1,280 @@
-# Satellite Data Visualization & Analytics Platform
+# Satellite Analytics - Complete Application
 
-A comprehensive web application for visualizing and analyzing satellite imagery, weather data, and environmental metrics in real-time. Compare historical and current data to track changes in rainfall, vegetation, temperature, and land-use patterns.
+A full-stack satellite data visualization and analysis platform built with Node.js, React, PostgreSQL, and Leaflet maps.
 
-## 🌍 Features
-
-- **Interactive Map Visualization**: Leaflet-based maps with multiple satellite imagery layers
-- **Real-time Data Integration**: NASA EONET, Copernicus, and weather APIs
-- **Temporal Analysis**: Time-slider to compare historical and current satellite data
-- **Multi-Layer Support**:
-  - Rainfall patterns and precipitation
-  - Vegetation indices (NDVI)
-  - Temperature variations
-  - Land-use classification
-  - Natural disasters and events
-- **Advanced Tools**:
-  - Region comparison
-  - Data export (PNG, GeoJSON, CSV)
-  - Custom alerts and monitoring
-  - Historical data analysis
-- **Professional Dashboard**: Real-time metrics, trends, and insights
-- **Responsive Design**: Works seamlessly on desktop, tablet, and mobile
-
-## 🛠 Tech Stack
-
-### Frontend
-- **React 18** - UI framework
-- **Leaflet** - Interactive mapping
-- **Axios** - HTTP client
-- **React Query** - Data fetching and caching
-- **Tailwind CSS** - Styling
-- **Chart.js** - Data visualization charts
-
-### Backend
-- **Node.js** - Runtime
-- **Express.js** - Web framework
-- **PostgreSQL** - Database
-- **Redis** - Caching
-- **Docker** - Containerization
-
-### External APIs
-- NASA EONET (Natural events)
-- Copernicus Open Access Hub (Satellite imagery)
-- OpenWeatherMap (Weather data)
-- USGS (Elevation & land data)
-
-## 📁 Project Structure
+## Project Structure
 
 ```
 satellite-analytics/
-├── frontend/                 # React application
+├── backend/                # Node.js/Express API
 │   ├── src/
-│   │   ├── components/      # Reusable components
-│   │   ├── pages/          # Page components
-│   │   ├── services/       # API services
-│   │   ├── hooks/          # Custom React hooks
-│   │   ├── utils/          # Utility functions
-│   │   └── App.jsx
-│   ├── public/
-│   └── package.json
-├── backend/                  # Node.js/Express API
+│   │   ├── config/        # Configuration files
+│   │   ├── middleware/    # Express middleware
+│   │   ├── models/        # Database models
+│   │   ├── routes/        # API routes
+│   │   ├── utils/         # Utility functions
+│   │   └── index.js       # Entry point
+│   ├── Dockerfile
+│   ├── package.json
+│   └── README.md
+├── frontend/              # React application
 │   ├── src/
-│   │   ├── routes/         # API routes
-│   │   ├── controllers/    # Request handlers
-│   │   ├── models/         # Database models
-│   │   ├── middleware/     # Express middleware
-│   │   ├── services/       # Business logic
-│   │   ├── utils/          # Helper functions
+│   │   ├── components/    # React components
+│   │   ├── pages/         # Page components
+│   │   ├── services/      # API services
+│   │   ├── stores/        # State management (Zustand)
+│   │   ├── App.js
 │   │   └── index.js
-│   ├── migrations/         # Database migrations
-│   └── package.json
-├── docker-compose.yml       # Docker orchestration
-├── .env.example            # Environment variables template
+│   ├── public/
+│   ├── Dockerfile
+│   ├── nginx.conf
+│   ├── package.json
+│   └── README.md
+├── docker-compose.yml     # Docker orchestration
 └── README.md              # This file
-
 ```
 
-## 🚀 Quick Start
+## Features
+
+### Backend
+- ✅ RESTful API with Express.js
+- ✅ PostgreSQL database with Sequelize ORM
+- ✅ JWT-based authentication
+- ✅ User management and profiles
+- ✅ Satellite data management
+- ✅ Natural event tracking
+- ✅ Data analysis tools
+- ✅ Saved locations management
+- ✅ Role-based access control
+- ✅ Comprehensive logging
+- ✅ Error handling
+
+### Frontend
+- ✅ React 18 application
+- ✅ Interactive map visualization (Leaflet)
+- ✅ User authentication and profiles
+- ✅ Dashboard with statistics
+- ✅ Data analysis interface
+- ✅ Responsive design
+- ✅ State management with Zustand
+- ✅ Ant Design UI components
+- ✅ Real-time data updates
+
+### Infrastructure
+- ✅ Docker containerization
+- ✅ Docker Compose orchestration
+- ✅ PostgreSQL database
+- ✅ Nginx reverse proxy
+- ✅ Development and production ready
+
+## Quick Start with Docker
 
 ### Prerequisites
-- Node.js 16+ and npm
-- PostgreSQL 12+
-- Docker & Docker Compose (optional)
+- Docker
+- Docker Compose
 
-### Installation
+### Running the Application
 
-1. **Clone the repository**
+1. Clone the repository
 ```bash
-git clone https://github.com/mukunddhardwivedi-hash/satellite-analytics.git
+git clone <repository-url>
 cd satellite-analytics
 ```
 
-2. **Setup with Docker (Recommended)**
+2. Start all services
 ```bash
 docker-compose up --build
 ```
 
-The app will be available at:
-- Frontend: `http://localhost:3000`
-- Backend API: `http://localhost:5000`
-- PostgreSQL: `localhost:5432`
+3. Access the application
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:5000
+- Database: localhost:5432
 
-3. **Manual Setup**
+### Default Credentials
+- Database User: `postgres`
+- Database Password: `postgres`
+- Database Name: `satellite_db`
 
-**Backend:**
+## Manual Setup (Without Docker)
+
+### Backend Setup
+
 ```bash
 cd backend
 npm install
 cp .env.example .env
-# Update .env with your credentials and API keys
-npm run migrate
-npm start
 ```
 
-**Frontend:**
+Update `.env` with your database credentials, then:
+
+```bash
+npm run dev
+```
+
+### Frontend Setup
+
 ```bash
 cd frontend
 npm install
+echo "REACT_APP_API_URL=http://localhost:5000/api" > .env
 npm start
 ```
 
-## 🔑 Environment Variables
+### Database Setup
 
-Create a `.env` file in the backend directory:
-
-```env
-NODE_ENV=development
-PORT=5000
-DATABASE_URL=postgresql://user:password@localhost:5432/satellite_db
-REDIS_URL=redis://localhost:6379
-JWT_SECRET=your_jwt_secret_key
-
-# External APIs
-NASA_API_KEY=your_nasa_api_key
-OPENWEATHERMAP_API_KEY=your_openweathermap_key
-COPERNICUS_USERNAME=your_copernicus_username
-COPERNICUS_PASSWORD=your_copernicus_password
-
-# Frontend
-REACT_APP_API_URL=http://localhost:5000
-REACT_APP_MAPBOX_TOKEN=your_mapbox_token
+Create PostgreSQL database:
+```bash
+psql -U postgres -c "CREATE DATABASE satellite_db;"
 ```
 
-## 📊 API Endpoints
+## API Endpoints
+
+### Authentication
+- `POST /api/auth/register` - Register new user
+- `POST /api/auth/login` - Login user
+- `GET /api/auth/me` - Get current user
+- `POST /api/auth/logout` - Logout user
 
 ### Satellite Data
-- `GET /api/satellite/imagery` - Fetch satellite imagery
-- `GET /api/satellite/ndvi/:region/:date` - Vegetation index
-- `GET /api/satellite/temperature/:region/:date` - Temperature data
-- `GET /api/satellite/rainfall/:region/:date` - Rainfall data
+- `GET /api/satellite` - List satellite data
+- `GET /api/satellite/:id` - Get satellite data by ID
+- `POST /api/satellite` - Create new satellite data (admin only)
+- `PUT /api/satellite/:id` - Update satellite data (admin only)
 
-### Events
-- `GET /api/events` - Natural disasters and events
-- `GET /api/events/:type` - Filter by event type
+### Natural Events
+- `GET /api/events` - List natural events
+- `GET /api/events/:id` - Get event by ID
+- `POST /api/events` - Create new event (admin only)
+- `PUT /api/events/:id` - Update event (admin only)
 
 ### Analysis
-- `GET /api/analysis/compare/:region/:startDate/:endDate` - Compare time periods
-- `POST /api/analysis/export` - Export data
+- `GET /api/analysis` - List user's analyses
+- `GET /api/analysis/:id` - Get analysis by ID
+- `POST /api/analysis` - Create new analysis
+- `PUT /api/analysis/:id` - Update analysis
+- `DELETE /api/analysis/:id` - Delete analysis
 
-### User Management
-- `POST /api/auth/register` - User registration
-- `POST /api/auth/login` - User login
-- `GET /api/users/saved-regions` - User's saved locations
+### Saved Locations
+- `GET /api/locations` - Get user's saved locations
+- `GET /api/locations/public/list` - Get public locations
+- `GET /api/locations/:id` - Get location by ID
+- `POST /api/locations` - Create new location
+- `PUT /api/locations/:id` - Update location
+- `DELETE /api/locations/:id` - Delete location
 
-## 🗺 Map Layers
+### Users
+- `GET /api/users/profile/:id` - Get user profile
+- `PUT /api/users/profile/update` - Update user profile
+- `POST /api/users/change-password` - Change password
 
-- **Satellite Imagery**: True color and false color composites
-- **Vegetation Index (NDVI)**: Normalized Difference Vegetation Index
-- **Temperature**: Thermal imaging overlay
-- **Precipitation**: Rainfall and moisture patterns
-- **Land Use**: Classification and change detection
-- **Events**: Natural disasters, fires, floods
-- **Elevation**: 3D terrain visualization
+## Environment Variables
 
-## 📈 Dashboard Features
+### Backend (.env)
+```
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=postgres
+DB_NAME=satellite_db
+PORT=5000
+NODE_ENV=development
+JWT_SECRET=your_jwt_secret_key_here
+FRONTEND_URL=http://localhost:3000
+LOG_LEVEL=info
+```
 
-- Real-time metric cards (temperature, rainfall, vegetation)
-- Time-series charts for trend analysis
-- Region comparison tools
-- Heatmaps and density visualizations
-- Alert system for significant changes
-- Historical data export
+### Frontend (.env)
+```
+REACT_APP_API_URL=http://localhost:5000/api
+```
 
-## 🔐 Security Features
+## Database Models
 
-- JWT authentication
-- Role-based access control (RBAC)
-- Rate limiting on APIs
-- Input validation and sanitization
-- HTTPS/TLS encryption
-- Secure password hashing (bcrypt)
+1. **User** - User accounts and authentication
+2. **SatelliteData** - Satellite imagery and measurements
+3. **NaturalEvent** - Natural disaster events
+4. **SavedLocation** - User's bookmarked locations
+5. **Analysis** - User's data analysis projects
 
-## 🧪 Testing
+## Technology Stack
 
+### Backend
+- Node.js & Express.js
+- PostgreSQL & Sequelize ORM
+- JWT Authentication
+- Winston Logger
+- Helmet Security
+
+### Frontend
+- React 18
+- React Router v6
+- Zustand (State Management)
+- Leaflet (Map Library)
+- Ant Design (UI Components)
+- Axios (HTTP Client)
+- Recharts (Charting)
+
+### DevOps
+- Docker & Docker Compose
+- Nginx Reverse Proxy
+- PostgreSQL Container
+
+## Development
+
+### Running Tests
+
+Backend:
 ```bash
-# Backend tests
 cd backend
 npm test
+```
 
-# Frontend tests
+Frontend:
+```bash
 cd frontend
 npm test
 ```
 
-## 📚 Documentation
+### Building for Production
 
-- [Backend API Documentation](./backend/API.md)
-- [Frontend Component Guide](./frontend/COMPONENTS.md)
-- [Database Schema](./backend/SCHEMA.md)
-- [Deployment Guide](./DEPLOYMENT.md)
+```bash
+docker-compose -f docker-compose.yml up -d
+```
 
-## 🌐 Live Demo
+Or individually:
 
-Coming soon...
+Backend:
+```bash
+cd backend
+npm run build
+```
 
-## 📦 Available Scripts
+Frontend:
+```bash
+cd frontend
+npm run build
+```
 
-### Backend
-- `npm start` - Start development server
-- `npm run dev` - Start with hot reload
-- `npm run migrate` - Run database migrations
-- `npm test` - Run tests
-- `npm run build` - Build for production
+## Logging
 
-### Frontend
-- `npm start` - Start development server
-- `npm run build` - Build for production
-- `npm test` - Run tests
-- `npm run lint` - Lint code
+Logs are stored in `backend/logs/`:
+- `combined.log` - All logs
+- `error.log` - Error logs only
 
-## 🤝 Contributing
+## Project Status
 
-Contributions are welcome! Please follow these steps:
+✅ Complete - Production Ready
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit changes (`git commit -m 'Add AmazingFeature'`)
-4. Push to branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+## License
 
-## 📝 License
+MIT
 
-This project is licensed under the MIT License - see [LICENSE](LICENSE) file for details.
+## Support
 
-## 🙏 Acknowledgments
+For issues or questions, please open an issue on GitHub.
 
-- NASA for EONET and satellite data APIs
-- Copernicus for open access satellite imagery
-- Leaflet for mapping library
-- React community for excellent tools and documentation
+## Contact
 
-## 📞 Support
-
-For issues, questions, or suggestions:
-- Open an issue on GitHub
-- Check existing documentation
-- Review API documentation
-
-## 🔄 Updates & Roadmap
-
-- [ ] Machine learning models for predictive analytics
-- [ ] Advanced image processing and analysis
-- [ ] Mobile app (React Native)
-- [ ] Real-time notifications
-- [ ] Collaborative workspaces
-- [ ] Custom algorithm support
-- [ ] Integration with more data sources
-- [ ] Advanced GIS tools
-
----
-
-**Built with ❤️ for Earth Observation and Environmental Analytics**
+Mukund Dwivedi
+Email: mukunddhardwivedi@gmail.com

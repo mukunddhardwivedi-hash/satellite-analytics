@@ -1,95 +1,58 @@
 version: '3.8'
 
 services:
-  # PostgreSQL Database
   postgres:
     image: postgres:15-alpine
-    container_name: satellite-db
     environment:
-      POSTGRES_USER: ${DB_USER:-postgres}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
-      POSTGRES_DB: ${DB_NAME:-satellite_db}
+      POSTGRES_DB: satellite_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./backend/migrations/init.sql:/docker-entrypoint-initdb.d/init.sql
-    networks:
-      - satellite-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
 
-  # Redis Cache
-  redis:
-    image: redis:7-alpine
-    container_name: satellite-cache
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-    networks:
-      - satellite-network
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  # Node.js Backend API
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: satellite-api
     environment:
       NODE_ENV: development
-      PORT: 5000
-      DATABASE_URL: postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@postgres:5432/${DB_NAME:-satellite_db}
-      REDIS_URL: redis://redis:6379
-      JWT_SECRET: ${JWT_SECRET:-your_jwt_secret_key_change_this}
-      NASA_API_KEY: ${NASA_API_KEY}
-      OPENWEATHERMAP_API_KEY: ${OPENWEATHERMAP_API_KEY}
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: satellite_db
+      JWT_SECRET: your_jwt_secret_key_here
+      FRONTEND_URL: http://localhost:3000
     ports:
       - "5000:5000"
     depends_on:
       postgres:
         condition: service_healthy
-      redis:
-        condition: service_healthy
     volumes:
-      - ./backend:/app
-      - /app/node_modules
-    networks:
-      - satellite-network
+      - ./backend/src:/app/backend/src
     command: npm run dev
 
-  # React Frontend
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: satellite-ui
     environment:
-      REACT_APP_API_URL: http://localhost:5000
-      REACT_APP_MAPBOX_TOKEN: ${REACT_APP_MAPBOX_TOKEN}
+      REACT_APP_API_URL: http://localhost:5000/api
     ports:
-      - "3000:3000"
+      - "3000:80"
     depends_on:
       - backend
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    networks:
-      - satellite-network
-    command: npm start
-
-networks:
-  satellite-network:
-    driver: bridge
 
 volumes:
   postgres_data:
-  redis_data:
+
+networks:
+  default:
+    name: satellite-analytics-network

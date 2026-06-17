@@ -1,23 +1,30 @@
 const { Sequelize } = require('sequelize');
-const dotenv = require('dotenv');
+const logger = require('../utils/logger');
 
-dotenv.config();
+const sequelize = new Sequelize(
+  process.env.DB_NAME || 'satellite_db',
+  process.env.DB_USER || 'postgres',
+  process.env.DB_PASSWORD || 'postgres',
+  {
+    host: process.env.DB_HOST || 'localhost',
+    port: process.env.DB_PORT || 5432,
+    dialect: 'postgres',
+    logging: (msg) => logger.info(msg),
+    pool: {
+      max: 5,
+      min: 0,
+      acquire: 30000,
+      idle: 10000,
+    },
+  }
+);
 
-const sequelize = new Sequelize({
-  dialect: 'postgres',
-  host: process.env.DB_HOST || 'localhost',
-  port: process.env.DB_PORT || 5432,
-  username: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASSWORD || 'postgres',
-  database: process.env.DB_NAME || 'satellite_db',
-  logging: process.env.NODE_ENV === 'development' ? console.log : false,
-  pool: {
-    max: 5,
-    min: 0,
-    acquire: 30000,
-    idle: 10000
-  },
-  operatorsAliases: false
-});
+sequelize.authenticate()
+  .then(() => {
+    logger.info('Database connection successful');
+  })
+  .catch((error) => {
+    logger.error('Database connection failed:', error);
+  });
 
 module.exports = sequelize;
